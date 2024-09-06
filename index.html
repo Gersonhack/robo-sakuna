@@ -140,6 +140,7 @@
 
     // Close cookie
     document.getElementById("closeWelcome").onclick = function () {
+      alert('aguarde se conectado ao aviator...')
         document.getElementById("welcomeMessage").style.display = "none";
         setCookie("welcome", "shown", 365);
     };
