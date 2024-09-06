@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>assistente | sakuna</title>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+            <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant:ital,wght@0,300..700;1,300..700&family=Handjet:wght@100..900&family=Kalnia+Glaze:wdth,wght@112.2,100..700&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Teko:wght@300..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="/bootstrap.min.css">
+    
+</head>
+<body>
+  <nav
+      <div class="navbar">
+        <a class="navbar-brand" id="placar" href="#"></a>
+
+                <p id="tempo"></p>
+                <div id="usuarios-online" class="text-light"></div>
+      </div>
+  </nav>
+<!-- Welcome Message -->
+<div id="welcomeMessage">
+    <p class="txt">Bem-vindo ao nosso robô! Aqui você receberá sinais automaticamente 
+    Já faz parte dos 98,9% dos jovens que estão a mudar a vida com o mercado desportivo!
+    
+    Este é um grupo de sinais com 100% de acertividade, por favor crie já uma nova conta e começa a usufruir os sinais.
+    
+    
+    NB: Mesmo que tenha uma antiga conta, deve criar uma nova conta para os sinais poderem funcionar corretamente.</p>
+    <button id="closeWelcome">Fechar</button>
+    
+</div>
+
+
+
+
+<!--  containergenerated -->
+<div id="cardContainer"></div>
+
+<!-- Scroll button -->
+<div id="scrollButton">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-down ig" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1" />
+</svg>
+</div>
+</main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Arrays  random velas
+        
+        
+         //random apostar após
+    const apostarArray = ['2.46', '3.78', '5.89', '7.32', '9.79', '12.59','1.23','3.24','12.56x','45.00x','2.67','4.11','1.50','3.00','1.80','3.21','5.55','1.90','1.80','2.76','9.89','3.00','1.67','4.67','1.90','8.12','3.66'];
+    //random sair até
+    const sairArray = [                '10.09', '23.02', '2.00', '7.12', '9.43', '2.00', '3.48' , '2.00', '2.23', '3.77', '2.08', '3.09', '4.00,' ,'5', '4.28', '17.21', '4.56', '5', '13',
+                    '3', '2', '13', '6.44', '4', '5', '2', '3.78 ', '2', '2', '3.3', '2', '3 ', '2', '3.98 ', '2', '3', '2.24', '3.16', '19', '10', '14', '1.50', '3', '4', '1.80x', '1.130', '27'];
+
+    // Function  generate nova card
+    function generateCard() {
+        const apostarRandom = apostarArray[Math.floor(Math.random() * apostarArray.length)];
+        const sairRandom = sairArray[Math.floor(Math.random() * sairArray.length)];
+        const protecaoRandom = Math.floor(Math.random() * 2) + 1;
+
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        const cardData = {
+            apostar: apostarRandom,
+            sair: sairRandom,
+            protecao: protecaoRandom,
+            time: timeString
+        };
+        saveCardToLocalStorage(cardData);
+
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'card';
+        cardDiv.innerHTML = `
+            <img class="gr" src="/ai-generated-8644499_640.jpg" class="gr" alt="Aviator Image">
+            <img class="bot-profile" src="/086c32533bc3dedbda109b96136f2e22.jpg" alt="Bot Profile">
+            <div class="card-content">
+                <h2>🛩 ENTRADA CONFIRMADA 🛩</h2>
+                
+                <p>📱 Site web:  <a href="https://media1.placard.co.mz/redirect.aspx?pid=3699&bid=1712">aviator-placard</a></p>
+                <p>👉 Apostar após: ${apostarRandom}X.</p>
+                <p>💰 Sair até ${sairRandom}X.</p>
+                <br>
+                <p>🔁 Realize até ${protecaoRandom} proteções</p>
+            </div>
+            <div class="timestamp">${timeString}</div>
+            <button class="btn" onclick="btn()">🕹️ jogue aqui</button>
+        `;
+
+        document.getElementById('cardContainer').appendChild(cardDiv);
+        autoScroll();
+    }
+
+    // salvar card no localStorage
+    function saveCardToLocalStorage(cardData) {
+        let cards = JSON.parse(localStorage.getItem('cards')) || [];
+        cards.push(cardData);
+        localStorage.setItem('cards', JSON.stringify(cards));
+    }
+
+    // carregar cards para localStorage
+    function loadCardsFromLocalStorage() {
+        let cards = JSON.parse(localStorage.getItem('cards')) || [];
+        cards.forEach(card => {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+            cardDiv.innerHTML = `
+                <img class="gr" src="/ai-generated-8644499_640.jpg" alt="Aviator Image">
+                <img class="bot-profile" src="/086c32533bc3dedbda109b96136f2e22.jpg" alt="Bot Profile">
+                <div class="card-content">
+                    <h2>🛩 ENTRADA CONFIRMADA 🛩</h2>
+                <p>📱 Site web:  <a href="https://media1.placard.co.mz/redirect.aspx?pid=3699&bid=1712">aviator-placard</a></p>
+                    <p>👉 Apostar após: ${card.apostar}X.</p>
+                    <p>💰 Sair até ${card.sair}X.</p>
+                    <br>
+                    <p>🔁 Realize até ${card.protecao} proteções</p>
+                </div>
+                <div class="timestamp"> ${card.time}</div>
+            <button class="btn" onclick="btn()">🕹️ jogue aqui</button>
+            `;
+            document.getElementById('cardContainer').appendChild(cardDiv);
+        });
+        autoScroll();
+    }
+
+    // Function welcome message
+    function showWelcomeMessage() {
+        const welcome = getCookie("welcome");
+        if (!welcome) {
+            document.getElementById("welcomeMessage").style.display = "block";
+        }
+    }
+
+    // Close cookie
+    document.getElementById("closeWelcome").onclick = function () {
+        document.getElementById("welcomeMessage").style.display = "none";
+        setCookie("welcome", "shown", 365);
+    };
+
+    // Cookie functions to set and get cookie
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+        const cname = name + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+                // continues from where it was left off
+        
+                for (let i = 0; i < ca.length; i++) {
+                  let c = ca[i];
+                  while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                  }
+                  if (c.indexOf(cname) == 0) {
+                    return c.substring(cname.length, c.length);
+                  }
+                }
+                return "";
+                }
+        
+                // Scroll to bottom logic
+                function autoScroll() {
+                  const container = document.getElementById('cardContainer');
+                  container.scrollTop = container.scrollHeight;
+                }
+        
+                // Show or hide the scroll-to-bottom button
+                function toggleScrollButton() {
+                  const container = document.getElementById('cardContainer');
+                  const scrollButton = document.getElementById('scrollButton');
+                  if (container.scrollTop + container.clientHeight < container.scrollHeight) {
+                    scrollButton.style.display = 'block';
+                  } else {
+                    scrollButton.style.display = 'none';
+                  }
+                }
+        
+                // Scroll-to-bottom button click action
+                document.getElementById('scrollButton').onclick = function() {
+                  autoScroll();
+                };
+        
+                // Detect scroll event and show/hide the scroll button
+                document.getElementById('cardContainer').onscroll = function() {
+                  toggleScrollButton();
+                };
+        
+                // Load existing cards from localStorage upon page load
+                window.onload = function() {
+                  loadCardsFromLocalStorage();
+                  showWelcomeMessage(); // Show welcome message if first time
+                };
+        
+                // Automatically generate new cards every random interval
+                function startAutoCardGeneration() {
+                  setTimeout(() => {
+                    generateCard();
+                    startAutoCardGeneration();
+                  }, getRandomInterval());
+                }
+        
+                // Function random interval 1 a 3 minutes
+                function getRandomInterval() {
+                  return (Math.floor(Math.random() * 3) + 1) * 60000; // Random  1 a 3 minutes e milliseconds
+                }
+        
+                // Begin the automatic card generation on page load
+                startAutoCardGeneration();
+        
+                </script>
+                <script>
+                  function btn(){
+                  
+                    window.location.href="https://media1.placard.co.mz/redirect.aspx?pid=3699&bid=1712"
+                  }
+                  
+                  
+                  function gerarNumeroAleatorio(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                  }
+                  
+                  function atualizarNumerosAleatorios() {
+                    const numero1 = gerarNumeroAleatorio(1000, 5000);
+                    const numero2 = gerarNumeroAleatorio(50, 400);
+                  
+                    $('#placar').html(`<i class="g fas fa-calendar-check"></i> ${numero1} / <i class="red fas fa-times"></i> ${numero2}`);
+                  }
+                  
+                  $(document).ready(function() {
+                    atualizarNumerosAleatorios(); // inicializa os números aleatórios ao carregar a página
+                  
+                    setInterval(atualizarNumerosAleatorios, 90000); // atualiza os números aleatórios a cada 5 min
+                  });
+                  
+                  
+                </script>
+        <script>
+          function gerarNumeroUsuariosOnline() {
+            return Math.floor(Math.random() * 1000) + 50; // número aleatório entre 1 e 1000
+          }
+          
+          function atualizarUsuariosOnline() {
+            const numeroUsuarios = gerarNumeroUsuariosOnline();
+            $('#usuarios-online').html(`  <span class="online-text">usuários online</span> ${numeroUsuarios} <i class="k fas fa-users"></i>`);
+          }
+          
+          $(document).ready(function() {
+            atualizarUsuariosOnline(); // inicializa o número de usuários online ao carregar a página
+          
+            setInterval(atualizarUsuariosOnline, 60000); // atualiza o número de usuários online a cada 5 segundos
+          });
+        </script>
+             </body> </html>

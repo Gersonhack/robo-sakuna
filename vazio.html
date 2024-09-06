@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot Card Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            width: 300px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .card img {
+            width: 100%;
+            margin: 4px;
+            border-radius: 5px;
+        }
+        .bot-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .card-content {
+            padding: 10px;
+        }
+        .card-content h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .card-content p {
+            font-size: 16px;
+            color: #333;
+        }
+        .timestamp {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 10px;
+            color: gray;
+        }
+        .btn {
+            display: block;
+            width: 90%;
+            margin: 10px auto;
+            padding: 10px 0;
+            position: absolute;
+            background-color: #47a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- The container where cards will be generated -->
+<div id="cardContainer"></div>
+
+<!-- Button outside the card, below it -->
+<button class="btn">JOGUE AQUI!</button>
+
+<script>
+    // Arrays for random values
+    const apostarArray = ['2.46', '3.78', '5.89', '7.32', '9.79', '12.59'];
+    const sairArray = ['1.5', '1.8', '2.0', '2.5', '3.0'];
+
+    // Function to generate a new card
+    function generateCard() {
+        const apostarRandom = apostarArray[Math.floor(Math.random() * apostarArray.length)];
+        const sairRandom = sairArray[Math.floor(Math.random() * sairArray.length)];
+        const protecaoRandom = Math.floor(Math.random() * 2) + 1; // Generate 1 or 2 protections
+
+        // Create a new card div
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'card';
+
+        // Get the current time for the timestamp
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        // Store this card's details in localStorage
+        const cardData = {
+            apostar: apostarRandom,
+            sair: sairRandom,
+            protecao: protecaoRandom,
+            time: timeString
+        };
+        saveCardToLocalStorage(cardData);
+
+        // Add the content inside the card
+        cardDiv.innerHTML = `
+            <img src="your-image-link.jpg" alt="Aviator Image">
+            <img class="bot-profile" src="bot-profile-image.jpg" alt="Bot Profile">
+            <div class="card-content">
+                <h2>🛩 ENTRADA CONFIRMADA 🛩</h2>
+                <p>📱 Site web: Aviator - Placard.</p>
+                <p>👉 Apostar após: ${apostarRandom}X.</p>
+                <p>💰 Sair até ${sairRandom}X.</p>
+                <p>🔁 Realize até ${protecaoRandom} proteções</p>
+            </div>
+            <div class="timestamp">Gerado às: ${timeString}</div>
+        `;
+
+        // Add the card to the container
+        document.getElementById('cardContainer').appendChild(cardDiv);
+    }
+
+    // Function to save card data to localStorage
+    function saveCardToLocalStorage(cardData) {
+        let cards = JSON.parse(localStorage.getItem('cards')) || [];
+        cards.push(cardData);
+        localStorage.setItem('cards', JSON.stringify(cards));
+    }
+
+    // Function to load cards from localStorage
+    function loadCardsFromLocalStorage() {
+        let cards = JSON.parse(localStorage.getItem('cards')) || [];
+        cards.forEach(card => {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+            cardDiv.innerHTML = `
+                <img src="your-image-link.jpg" alt="Aviator Image">
+                <img class="bot-profile" src="bot-profile-image.jpg" alt="Bot Profile">
+                <div class="card-content">
+                    <h2>🛩 ENTRADA CONFIRMADA 🛩</h2>
+                    <p>📱 Site web: Aviator - Placard.</p>
+                    <p>👉 Apostar após: ${card.apostar}X.</p>
+                    <p>💰 Sair até ${card.sair}X.</p>
+                    <p>🔁 Realize até ${card.protecao} proteções</p>
+                </div>
+                <div class="timestamp">Gerado às: ${card.time}</div>
+            `;
+            document.getElementById('cardContainer').appendChild(cardDiv);
+        });
+    }
+
+    // Function to generate cards at random intervals (1, 2, or 3 minutes)
+    function startRandomGeneration() {
+        const randomTime = (Math.floor(Math.random() * 3) + 1) * 600; // Random between 1 and 3 minutes
+        setTimeout(() => {
+            generateCard();
+            startRandomGeneration(); // Recursively call to keep generating
+        }, randomTime);
+    }
+
+    // Load previous cards on page load
+    window.onload = function() {
+        loadCardsFromLocalStorage();
+        startRandomGeneration();
+    }
+</script>
+
+</body>
+</html>
